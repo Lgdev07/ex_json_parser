@@ -7,11 +7,6 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
-# Start the phoenix server if environment is set and running in a release
-if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
-  config :ex_json_parser, ExJsonParserWeb.Endpoint, server: true
-end
-
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -25,7 +20,6 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :ex_json_parser, ExJsonParserWeb.Endpoint,
@@ -45,7 +39,7 @@ if config_env() == :prod do
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
   #
-  #     config :ex_json_parser, ExJsonParserWeb.Endpoint, server: true
+  config :ex_json_parser, ExJsonParserWeb.Endpoint, server: true
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
