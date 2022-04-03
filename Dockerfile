@@ -29,7 +29,7 @@ RUN mix do deps.get, compile
 FROM build AS release
 
 # digests and compresses static files
-RUN mix phx.digest
+RUN mix assets.deploy
 
 # generate release executable
 RUN mix release
