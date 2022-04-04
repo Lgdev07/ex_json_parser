@@ -9,7 +9,8 @@ defmodule ExJsonParserWeb.HomeLiveTest do
 
       assert view
              |> element("form")
-             |> render_submit(%{"json" => ~s({"ok": "test"})}) =~ ~s(%{&amp;quot;ok&amp;quot; =&amp;gt; &amp;quot;test&amp;quot;})
+             |> render_submit(%{"json" => ~s({"ok": "test"})}) =~
+               ~s(%{&amp;quot;ok&amp;quot; =&amp;gt; &amp;quot;test&amp;quot;})
     end
 
     test "should not have an Error because json is right", %{conn: conn} do
