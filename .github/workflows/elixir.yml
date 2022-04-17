@@ -1,0 +1,29 @@
+name: Elixir CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build --target build --build-arg MIX_ENV=test --tag ex_json_parser:latest .
+
+    - name: Start
+      run: docker-compose run -d -e MIX_ENV=test -v /ex_json_parser/deps -v /ex_json_parser/_build --name app app /bin/sh
+
+    - name: Deps
+      run: docker exec app mix deps.get
+
+    - name: Format
+      run: docker exec app mix format --check-formatted
+
+    - name: Credo
+      run: docker exec app mix credo --strict
+
+    - name: Test
+      run: docker exec app mix test
