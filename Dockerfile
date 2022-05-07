@@ -37,7 +37,7 @@ RUN mix release
 # -----------------
 # PRODUCTION
 # -----------------
-FROM alpine:3.13.3
+FROM alpine:3.14.3
 
 WORKDIR /ex_json_parser
 
