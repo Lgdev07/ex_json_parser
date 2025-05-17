@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.13.0-erlang-23.3.4.10-alpine-3.14.3 AS base
+FROM hexpm/elixir:1.14.5-erlang-25.3.2.21-debian-buster-20240612-slim AS base
 
 RUN mkdir /ex_json_parser
 WORKDIR /ex_json_parser
@@ -7,14 +7,20 @@ WORKDIR /ex_json_parser
 ADD mix.exs ./
 RUN mix do local.hex --force, local.rebar --force, deps.get, deps.compile, tailwind.install
 
-RUN apk add npm inotify-tools
+# Install all required packages in a single layer
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    npm \
+    inotify-tools \
+    curl \
+    bash \
+    git && \
+    rm -rf /var/lib/apt/lists/*
 
 # -----------------
 # BUILD
 # -----------------
 FROM base AS build
-
-RUN apk add curl bash git
 
 ARG MIX_ENV=prod
 ENV MIX_ENV=$MIX_ENV
@@ -37,14 +43,16 @@ RUN mix release
 # -----------------
 # PRODUCTION
 # -----------------
-FROM alpine:3.14.3
+FROM alpine:3.18.3
 
 WORKDIR /ex_json_parser
 
 ARG MIX_ENV=prod
 
 # install dependencies
-RUN apk add ncurses-libs curl
+RUN apk add --no-cache \
+    ncurses-libs \
+    curl
 
 COPY --from=release /ex_json_parser/_build/$MIX_ENV/rel/ex_json_parser ./
 
