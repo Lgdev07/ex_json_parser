@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.14.5-erlang-25.3.2.21-debian-buster-20240612-slim AS base
+FROM hexpm/elixir:1.14.5-erlang-25.3.2.21-debian-bookworm-20260223-slim AS base
 
 RUN mkdir /ex_json_parser
 WORKDIR /ex_json_parser
